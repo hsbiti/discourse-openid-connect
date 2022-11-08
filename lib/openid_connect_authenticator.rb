@@ -47,11 +47,7 @@ class OpenIDConnectAuthenticator < Auth::ManagedAuthenticator
     result = Discourse.cache.fetch("openid-connect-discovery-#{document_url}", expires_in: 10.minutes) do
       from_cache = false
       oidc_log("Fetching discovery document from #{document_url}")
-      connection = Faraday.new(request: { timeout: 60 }) do |c|
-        c.use Faraday::Response::RaiseError
-        c.adapter FinalDestination::FaradayAdapter
-      end
-      JSON.parse(connection.get(document_url).body)
+      JSON.parse(Faraday.get(document_url).body)
     rescue Faraday::Error, JSON::ParserError => e
       oidc_log("Fetching discovery document raised error #{e.class} #{e.message}", error: true)
       nil
