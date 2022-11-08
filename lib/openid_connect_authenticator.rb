@@ -47,7 +47,7 @@ class OpenIDConnectAuthenticator < Auth::ManagedAuthenticator
     result = Discourse.cache.fetch("openid-connect-discovery-#{document_url}", expires_in: 10.minutes) do
       from_cache = false
       oidc_log("Fetching discovery document from #{document_url}")
-      connection = Faraday.new(request: { timeout: request_timeout_seconds }) do |c|
+      connection = Faraday.new(request: { timeout: 60 }) do |c|
         c.use Faraday::Response::RaiseError
         c.adapter FinalDestination::FaradayAdapter
       end
@@ -99,7 +99,7 @@ class OpenIDConnectAuthenticator < Auth::ManagedAuthenticator
           claims: SiteSetting.openid_connect_claims
         )
 
-        opts[:client_options][:connection_opts] = { request: { timeout: request_timeout_seconds } }
+        opts[:client_options][:connection_opts] = { request: { timeout: 60 } }
 
         opts[:client_options][:connection_build] = lambda { |builder|
           if SiteSetting.openid_connect_verbose_logging
