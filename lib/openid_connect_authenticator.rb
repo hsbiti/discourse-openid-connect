@@ -95,7 +95,7 @@ class OpenIDConnectAuthenticator < Auth::ManagedAuthenticator
           claims: SiteSetting.openid_connect_claims
         )
 
-        opts[:client_options][:connection_opts] = { request: { timeout: 60 } }
+        # opts[:client_options][:connection_opts] = { request: { timeout: 60 } }
 
         opts[:client_options][:connection_build] = lambda { |builder|
           if SiteSetting.openid_connect_verbose_logging
