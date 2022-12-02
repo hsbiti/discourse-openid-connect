@@ -9,7 +9,6 @@
 
 enabled_site_setting :openid_connect_enabled
 
-require_relative "lib/fix_timeout"
 require_relative "lib/openid_connect_faraday_formatter"
 require_relative "lib/omniauth_open_id_connect"
 require_relative "lib/openid_connect_authenticator"
