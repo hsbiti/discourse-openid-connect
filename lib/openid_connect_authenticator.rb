@@ -111,4 +111,14 @@ class OpenIDConnectAuthenticator < Auth::ManagedAuthenticator
   def request_timeout_seconds
     GlobalSetting.openid_connect_request_timeout_seconds
   end
+  
+  class FinalDestination::Resolver
+      module OpenIdResolverLookup
+          def self.lookup(addr, timeout: nil)
+              Rails.logger.debug("==== Fix timeout ====")
+              super(addr,20);
+          end
+      end
+      prepend OpenIdResolverLookup
+  end
 end
