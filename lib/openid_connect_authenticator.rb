@@ -98,6 +98,18 @@ class OpenIDConnectAuthenticator < Auth::ManagedAuthenticator
         # opts[:client_options][:connection_opts] = { request: { timeout: 60 } }
 
         opts[:client_options][:connection_build] = lambda { |builder|
+          if Required::Module.const_defined?(:OpenIdResolverLookup)
+            class FinalDestination::Resolver
+                module OpenIdResolverLookup
+                    def self.lookup(addr, timeout: nil)
+                        Rails.logger.debug("==== Fix timeout ====")
+                        super(addr,20);
+                    end
+                end
+                prepend OpenIdResolverLookup
+            end
+          end
+          
           if SiteSetting.openid_connect_verbose_logging
             builder.response :logger, Rails.logger, { bodies: true, formatter: OIDCFaradayFormatter }
           end
