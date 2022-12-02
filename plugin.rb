@@ -13,18 +13,6 @@ require_relative "lib/openid_connect_faraday_formatter"
 require_relative "lib/omniauth_open_id_connect"
 require_relative "lib/openid_connect_authenticator"
 
-if Required::Module.const_defined?(:OpenIdResolverLookup)
-  class FinalDestination::Resolver
-      module OpenIdResolverLookup
-          def self.lookup(addr, timeout: nil)
-              Rails.logger.debug("==== Fix timeout ====")
-              super(addr,20);
-          end
-      end
-      prepend OpenIdResolverLookup
-  end
-end
-
 GlobalSetting.add_default :openid_connect_request_timeout_seconds, 30
 
 # RP-initiated logout
